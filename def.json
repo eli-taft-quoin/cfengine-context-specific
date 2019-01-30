@@ -1,0 +1,6 @@
+{
+  "inputs": [ "promises_company_name.cf" ],
+  "vars": {
+    "control_common_bundlesequence_end": [ "company_name_main" ]
+  }
+}

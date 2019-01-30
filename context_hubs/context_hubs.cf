@@ -1,0 +1,29 @@
+body file control
+{
+  # Defines the input files to load for this particular context
+  inputs => {
+    "context_$(contexts.active)/sample_promises.cf",
+  };
+}
+
+bundle common context_hubs
+{
+  vars:
+    any::
+      # This array is loaded by the context_shared promise in the 
+      # promises_company_name.cf file if this is the context to be used.
+
+      # Potentially hundreds more of these; this is just a sample
+      "check_only" slist => {
+        "cis_01_01_01_01",
+        "cis_01_01_01_02"
+      };
+}
+
+bundle agent context_hubs
+{
+  # This is where we tell CFEngine which bundles to run for this
+  # context
+  methods:
+    "any" usebundle => git_update_masterfiles;
+}

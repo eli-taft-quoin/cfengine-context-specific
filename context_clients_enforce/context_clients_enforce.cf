@@ -1,0 +1,26 @@
+body file control
+{
+  # Defines the input files to load for this particular context
+  inputs => {
+    "context_$(contexts.active)/sample_promises.cf",
+  };
+}
+
+bundle common context_clients_enforce
+{
+  vars:
+    any::
+      # This array is loaded by the context_shared promise in the 
+      # promises_company_name.cf file if this is the context to be used.
+
+      # None are set to check_only, meaning ALL will be enforced.
+      "check_only" slist => { };
+}
+
+bundle agent context_clients_enforce
+{
+  # This is where we tell CFEngine which bundles to run for this
+  # context
+  methods:
+    "any" usebundle => sample_promise;
+}

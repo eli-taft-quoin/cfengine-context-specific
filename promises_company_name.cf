@@ -1,0 +1,77 @@
+body file control
+{ 
+  # Load whatever inputs are determined by the contexts bundle below
+  inputs => {
+    @(contexts.inputs),        
+    @(context_shared.inputs),  
+  };
+}  
+
+bundle common contexts
+{
+  classes:
+    # CFEngine creates classes for the hostname and IP address of each server.
+    # This aproach assumes that you have a way of separating client
+    # servers into various contexts based on one of those classes.
+    "context_hubs" expression => classmatch("am_policy_hub");
+    "context_clients" expression => classmatch("^reg_expression_match$");
+    "context_clients_enforce" expression => classmatch("^reg_expression_match$");
+
+  vars:
+    any::
+      # Default is unknown, but is overridden if the context is determined
+      "active" string => "unknown", policy => "overridable";
+      "inputs" slist => { "context_unknown/context_unknown.cf" };
+      "bundles" slist => { "context_unknown" };
+
+    context_hubs::
+      "active" string => "hubs", policy => "overridable";
+      "inputs" slist => { "context_hubs/context_hubs.cf" };
+      "bundles" slist => { "context_hubs" };
+
+    context_clients::
+      "active" string => "clients", policy => "overridable";
+      "inputs" slist => { "context_clients/context_clients.cf" };
+      "bundles" slist => { "context_clients" };
+
+    context_clients_enforce::
+      "active" string => "clients_enforce", policy => "overridable";
+      "inputs" slist => { "context_clients_enforce/context_clients_enforce.cf" };
+      "bundles" slist => { "context_clients_enforce" };
+}
+
+bundle common context_shared
+{
+  vars:
+    any::
+      "inputs" slist => { "context_shared/context_shared.cf" };
+      "bundles" slist => { "context_shared"};
+
+    # Here we get the "check_only" array as it is defined for the specific
+    # context we are in.  This will be used in the shared security policies
+    # to determine whether to check only or enforce.
+    context_hubs::
+      "check_only" slist => { @(context_hubs.check_only) };
+    context_clients::
+      "check_only" slist => { @(context_clients.check_only) };
+    context_clients_enforce::
+      "check_only" slist => { @(context_clients_enforce.check_only) };
+}
+
+bundle agent company_name_main
+{
+  methods:
+
+    # Now that we have determined the context and the context-specific 
+    # security policy settings, run the shared promises and then the 
+    # context-specific promises.  Remember, the shared promises contain
+    # the security policies.
+
+    # Promises shared by all contexts
+    "$(context_shared.bundles)"
+      usebundle => $(context_shared.bundles);
+
+    # Context-specific promises
+    "$(contexts.bundles)"
+      usebundle => $(contexts.bundles);
+}

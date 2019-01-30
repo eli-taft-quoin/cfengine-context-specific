@@ -1,0 +1,6 @@
+bundle agent git_update_masterfiles
+{
+  reports:
+    any::
+      "This is a sample promise that only runs in the context_hubs context.";
+}

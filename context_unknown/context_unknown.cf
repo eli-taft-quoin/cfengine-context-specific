@@ -1,0 +1,9 @@
+bundle agent context_unknown
+{
+  # This is where we tell CFEngine which bundles to run for this
+  # context
+
+  reports:
+    "any"::
+      "Could not determine the context.  No promises to run.";
+}

@@ -1,0 +1,19 @@
+body file control
+{
+  # Defines the input files to load for this particular context
+  inputs => {
+    # Potentially hundreds more of these; this is just a sample
+    "context_shared/security_promises.cf",
+  };
+}
+
+bundle agent context_shared
+{
+  # This is where we tell CFEngine which bundles to run for this
+  # context
+
+  methods:
+    # Potentially hundreds more of these; this is just a sample
+    "any" usebundle => cis_01_01_01_01;
+    "any" usebundle => cis_01_01_01_02;
+}

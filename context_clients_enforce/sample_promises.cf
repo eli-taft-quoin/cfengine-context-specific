@@ -1,0 +1,6 @@
+bundle agent sample_promise
+{
+  reports:
+    any::
+      "This is a sample promise that only runs in the context_clients_enforce context.";
+}
