@@ -1,4 +1,4 @@
-bundle agent sample_promise
+bundle agent sample_bundle
 {
   reports:
     any::

@@ -22,5 +22,5 @@ bundle agent context_clients_enforce
   # This is where we tell CFEngine which bundles to run for this
   # context
   methods:
-    "any" usebundle => sample_promise;
+    "any" usebundle => sample_bundle;
 }
